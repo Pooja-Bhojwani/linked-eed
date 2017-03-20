@@ -3,6 +3,7 @@ import urllib2 # Website connections
 import re # Regular expressions
 from time import sleep # To prevent overwhelming the server between connections
 import pandas as pd # For converting results to a dataframe and bar chart plots
+import sqlite3
 
 
 def job_extractor(website):
@@ -29,20 +30,30 @@ def job_extractor(website):
         
     return content
 
-def indeed_jobs(city = None, state = None):
+def indeed_jobs(final_job =None, city = None, state = None):
     '''
     Inputs the location's city and state and then looks for the job in Indeed.com 
     '''
-        
-    final_job = 'software+developer' # searching for data scientist exact fit("data scientist" on Indeed search)
+    # searching for data scientist exact fit("data scientist" on Indeed search)
     
+    #Create the proper indeed url based on the search criteria
     # Make sure the city specified works properly if it has more than one word (such as San Francisco)
-    if city is not None:
-        final_city = city.split() 
-        final_city = '+'.join(word for word in final_city)
-        final_site_list = 'http://www.indeed.ca/jobs?q=' + final_job + '&l=' + final_city + '%2C+' + state # Join all of our strings together so that indeed will search correctly
+    if final_job is not None:
+        if city is not None:
+            final_city = city.split() 
+            final_city = '+'.join(word for word in final_city)
+            final_site_list = 'http://www.indeed.ca/jobs?q=' + final_job + '&l=' + final_city + '%2C+' + state # Join all of our strings together so that indeed will search correctly
+        else:
+            final_site_list = ['http://www.indeed.ca/jobs?q="', final_job, '"']
     else:
-        final_site_list = ['http://www.indeed.ca/jobs?q="', final_job, '"']
+        if city is not None:
+            final_city = city.split() 
+            final_city = '+'.join(word for word in final_city)
+            final_site_list = 'http://www.indeed.ca/jobs?q=&l=' + final_city + '%2C+' + state # Join all of our strings together so that indeed will search correctly
+        else:
+            final_site_list = 'https://ca.indeed.com/jobs?q=&l=Nationwide'
+
+
 
     final_site = ''.join(final_site_list) # Merge the html address together into one string
 
@@ -60,9 +71,7 @@ def indeed_jobs(city = None, state = None):
     soup = BeautifulSoup(html,"html.parser") # Get the html from the first page
     
     # Now find out how many jobs there were
-
     div = soup.find(id = 'searchCount')
-    #print div
     
     num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
                                                                         # The 'searchCount' object has this
@@ -84,6 +93,8 @@ def indeed_jobs(city = None, state = None):
     num_pages = total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
                                       # search result page
     job_descriptions = [] # Store all our descriptions in this list
+    final_URLs = []       # Store final job URLs in this list
+
     
     for i in xrange(0,num_pages): # Loop through all of our search result pages
         print 'Getting page', i
@@ -99,9 +110,7 @@ def indeed_jobs(city = None, state = None):
         for script in page_obj(["script", "style"]):
             script.extract()
 
-        # div = page_obj.find(id = 'resultsCol')
-
-        print "And that's the result col"
+        print "And that's the result col" 
         job_link_area = page_obj.find(id = 'resultsCol') # The center column on the page where the job postings exist
             
         job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a', href=True)]
@@ -112,11 +121,21 @@ def indeed_jobs(city = None, state = None):
             final_description = job_extractor(job_URLS[j])
             if final_description: # So that we only append when the website was accessed correctly
                 job_descriptions.append(final_description)
-            #code for database connectivity
-            sleep(1) 
+                final_URLs.append(job_URLS[j])
+
+        # code for database connectivity
+        conn = sqlite3.connect('linkedeed.db')
+        c = conn.cursor()
+        c.execute('DROP TABLE IF EXISTS indeed_jobs')
+        c.execute('CREATE TABLE indeed_jobs(ID INTEGER PRIMARY KEY AUTOINCREMENT, WHAT TEXT, URL TEXT, DESCRIPTION TEXT)')
+        for i in range(len(job_descriptions)):
+            c.execute('INSERT INTO indeed_jobs (ID, WHAT, URL, DESCRIPTION) VALUES(?, ?, ?, ?)', ((i + 1), final_job.replace("+", " "), final_URLs[i], job_descriptions[i], ))
+            conn.commit()
+        c.close()
+        conn.close()
 
         print 'Done with collecting the job postings!'    
         print 'There were', len(job_descriptions), 'jobs successfully found.'
 
 
-indeed_jobs(city = 'Victoria', state = 'BC') 
+indeed_jobs(final_job = 'software+developer', city = 'Victoria', state = 'BC') 
