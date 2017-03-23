@@ -4,7 +4,10 @@ import re # Regular expressions
 from time import sleep # To prevent overwhelming the server between connections
 import pandas as pd # For converting results to a dataframe and bar chart plots
 import sqlite3
+import unicodedata
 
+job = "software developer"
+location = "Victoria, BC, Canada"
 
 def job_extractor(website):
     '''
@@ -29,6 +32,19 @@ def job_extractor(website):
     content = soup_obj.get_text() # Get the text from this 
         
     return content
+
+def clean_up(dirty_data):
+    """Clean up the dirty data."""
+    clean_data = []
+
+    for i in range(len(dirty_data)):
+        temp = unicodedata.normalize('NFKD', "".join(dirty_data[i]).replace('\n', ' ').
+                                     replace('\[[0-9]*\]', "").replace(' +', ' ').replace('\t', "").
+                                     replace('\r', ' ')).encode('ascii', 'ignore')
+        temp, sep, tail = temp.partition('Apply')
+        clean_data.append(temp)
+ 
+    return clean_data
 
 def indeed_jobs(final_job =None, city = None, state = None):
     '''
@@ -123,6 +139,8 @@ def indeed_jobs(final_job =None, city = None, state = None):
                 job_descriptions.append(final_description)
                 final_URLs.append(job_URLS[j])
 
+        new_job_desc = clean_up(job_descriptions)
+
         # code for database connectivity
         conn = sqlite3.connect('linkedeed.db')
         c = conn.cursor()
@@ -138,4 +156,9 @@ def indeed_jobs(final_job =None, city = None, state = None):
         print 'There were', len(job_descriptions), 'jobs successfully found.'
 
 
-indeed_jobs(final_job = 'software+developer', city = 'Victoria', state = 'BC') 
+location_list = location.split(",", 1)
+city = location_list[0]
+state = location_list[1].strip()
+final_job = job.lower().replace(' ', '+')
+
+indeed_jobs(final_job = final_job, city = city, state = state) 
