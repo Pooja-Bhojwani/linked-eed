@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="linkeddeed">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head 
+         content must come *after* these tags -->
+
+    <title>Linked-deed</title>
+
+    <!-- Bootstrap -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../static/mystyles.css" rel="stylesheet">
+    <link href="../static/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img src="../static/img/logo1.png" height=30 width=180></a>
+            </div>
+            
+        </div>
+    </nav>
+    <!-- Jumbotron -->
+    <header class="jumbotron">
+        <div class="container">
+            <div class="row row-header">
+                <div class="col-xs-12">
+                    <h1>Linked-deed.com</h1>
+                    <p style="padding:30px;"></p>
+                    <p>We connect you to your best suited job.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="row row-content">
+           <div class="col-xs-12">
+              <h3>Fill out the form</h3>
+               <p style="padding:20px;"></p> 
+           </div>
+            <div class="col-xs-12">
+                <form class="form-horizontal" role="form" action="http://localhost:5000/index" method="post">
+                    <div class="form-group">
+                        <label for="url" class="col-sm-2 control-label">LinkedIn Profile URL</label>
+                        <div class="col-sm-10">
+                        <input type="url" id="url" name="url" class="form-control" placeholder="Enter the LinkedIn Profile URL" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-2 control-label">LinkedIn Email</label>
+                        <div class="col-sm-10">
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your LinkedIn Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">LinkedIn Password</label>
+                        <div class="col-sm-10">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your LinkedIn Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary" name="signin">Next</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row row-footer">
+                <div class="col-xs-12">
+                    <p style="padding:10px;"></p>
+                    <p align=center>© Copyright 2017 Linked-deed</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/angular.min.js"></script>
+    <script src="../static/js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+.row-header {
+  margin: 0px auto;
+  padding: 0px 0px;
+}
+.row-content {
+  margin: 0px auto;
+  padding: 50px 0px;
+  border-bottom: 1px ridge;
+  min-height: 400px;
+}
+.row-footer {
+  background-color: #AfAfAf;
+  margin: 0px auto;
+  padding: 20px 0px;
+}
+.jumbotron {
+  margin: 0px auto;
+  padding: 70px 30px;
+  background: #B0B0B0;
+  color: floralwhite;
+}
+body {
+  align-content: center;
+  padding: 50px 0px 0px 0px;
+  z-index: 0;
+}
+.navbar-inverse {
+  background: #202020;
+}
+.affix {
+  top: 100px;
+}

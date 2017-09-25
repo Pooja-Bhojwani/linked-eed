@@ -1,0 +1,38 @@
+{% extends "form_head.html" %}
+{% block body %}
+<form class="form-horizontal" role="form" action="http://localhost:5000/form" method="post">
+    <div class="form-group">
+        <label for="what" class="col-sm-2 control-label">What kind of JOB?</label>
+        <div class="col-sm-3">
+            <select class="form-control" id="sel" name="what" onchange='CheckItems(this.value);'> 
+                <option value="choose">What do you want to be?</option> 
+                {% for job in jobs %}
+                <option value="{{ job }}">{{ job }}</option>
+                {% endfor %}
+                <option value="others">others</option>
+            </select>
+        </div>
+        <div class="col-sm-7">
+            <input type="text" id="what" name="what" style='display:none;' class="form-control" placeholder="Please specify">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="city" class="col-sm-2 control-label">Which City?</label>
+        <div class="col-sm-10">
+        <input type="text" id="city" name="city" class="form-control" value="{{location[0]}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="state" class="col-sm-2 control-label">Which State?</label>
+        <div class="col-sm-10">
+        <input type="text" id="state" name="state" class="form-control" value="{{location[1]}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+        <button type="submit" class="btn btn-primary" name="signin">Submit</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
