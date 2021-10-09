@@ -76,7 +76,7 @@ def indeed_jobs(final_job =None, city = None, state = None):
     
     base_url = 'https://www.indeed.ca/'
 
-    print final_site_list
+    print(final_site_list)
     
 
     try:
@@ -104,7 +104,7 @@ def indeed_jobs(final_job =None, city = None, state = None):
     if city is None:
         city_title = 'Nationwide'
         
-    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
+    print('There were', total_num_jobs, 'jobs found,', city_title) # Display how many jobs were found
     
     num_pages = total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
                                       # search result page
@@ -152,8 +152,8 @@ def indeed_jobs(final_job =None, city = None, state = None):
         c.close()
         conn.close()
 
-        print 'Done with collecting the job postings!'    
-        print 'There were', len(job_descriptions), 'jobs successfully found.'
+        print('Done with collecting the job postings!')   
+        print('There were', len(job_descriptions), 'jobs successfully found.')
 
 
 location_list = location.split(",", 1)
